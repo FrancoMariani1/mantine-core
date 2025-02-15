@@ -1,40 +1,9 @@
-// import React, { useEffect } from 'react';
-// import { useSelector, useDispatch } from 'react-redux';
-// import { fetchUserById, clearUser } from '../slices/userSlice';
 
-// const UserComponent = () => {
-//     const dispatch = useDispatch();
-//     const user = useSelector((state) => state.user?.data || null);
-//     const status = useSelector((state) => state.user.status);
-//     const error = useSelector((state) => state.user.error);
-
-//     useEffect(() => {
-//         dispatch(fetchUserById(1)); // Cargo el usuario con id 1 al montar el componente
-//     }, [dispatch]);
-
-//     return (
-//         <div>
-//             <h2>Usuario</h2>
-//             {status === 'loading' && <p>Cargando...</p>}
-//             {status === 'failed' && <p>Error: {error}</p>}
-//             {status === 'succeeded' && user && (
-//                 <div>
-//                     <p>Nombre: {user.name}</p>
-//                     <p>Email: {user.email}</p>
-//                 </div>
-//             )}
-//             <button onClick={() => dispatch(clearUser())}>Borrar Usuario</button>
-//         </div>
-//     );
-// };
-
-// export default UserComponent;
 
 import React, { useState } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { Button, Card, Text, Title, Container, TextInput } from '@mantine/core';
 
-// ✅ Consulta para obtener todos los usuarios (debe coincidir con `users` en el backend)
 const GET_USERS = gql`
   query GetUsers {
     users {  
@@ -45,7 +14,6 @@ const GET_USERS = gql`
   }
 `;
 
-// ✅ Consulta para obtener un usuario por ID (debe coincidir con `user` en el backend)
 const GET_USER = gql`
   query GetUser($id: ID!) {
     user(id: $id) {  
@@ -58,14 +26,12 @@ const GET_USER = gql`
 
 const UserComponent = () => {
   const [userId, setUserId] = useState('');
-
-  // 🔹 Obtener todos los usuarios
+  
   const { loading: usersLoading, error: usersError, data: usersData, refetch: refetchUsers } = useQuery(GET_USERS);
-
-  // 🔹 Obtener un usuario por ID
+  
   const { loading: userLoading, error: userError, data: userData, refetch: refetchUser } = useQuery(GET_USER, {
     variables: { id: userId ? parseInt(userId) : null }, 
-    skip: !userId, // 🔹 Evita ejecutar la consulta sin ID válido
+    skip: !userId, 
   });
 
   return (
